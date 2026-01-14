@@ -1,122 +1,62 @@
 [
     {
-        "id": 1,
-        "eventId": 1,
+        "uid": "user_001",
         "name": "John Doe",
         "caregiverName": "Jane Doe",
         "email": "john.doe@email.com",
         "phone": "+65 9123 4567",
-        "status": "registered",
-        "attendance": null
+        "membership": "weekly_3",
+        "isWheelchairUser": true,
+        "notes": "Prefers morning sessions"
     },
     {
-        "id": 2,
-        "eventId": 1,
+        "uid": "user_002",
         "name": "Mary Smith",
         "caregiverName": "Tom Smith",
         "email": "mary.smith@email.com",
         "phone": "+65 9234 5678",
-        "status": "registered",
-        "attendance": null
+        "membership": "monthly_1",
+        "isWheelchairUser": false,
+        "notes": ""
     },
     {
-        "id": 3,
-        "eventId": 1,
+        "uid": "user_003",
         "name": "Robert Lee",
         "caregiverName": "Sarah Lee",
         "email": "robert.lee@email.com",
         "phone": "+65 9345 6789",
-        "status": "registered",
-        "attendance": null
+        "membership": "weekly_2",
+        "isWheelchairUser": false,
+        "notes": "Allergic to peanuts"
     },
     {
-        "id": 4,
-        "eventId": "event_101",
+        "uid": "user_004",
         "name": "Emily Chen",
         "caregiverName": "Michael Chen",
         "email": "emily.chen@email.com",
         "phone": "+65 9456 7890",
-        "status": "registered",
-        "attendance": null
+        "membership": "weekly_5",
+        "isWheelchairUser": true,
+        "notes": ""
     },
     {
-        "id": 5,
-        "eventId": "event_101",
+        "uid": "user_005",
         "name": "David Wong",
         "caregiverName": "Lisa Wong",
         "email": "david.wong@email.com",
         "phone": "+65 9567 8901",
-        "status": "registered",
-        "attendance": null
+        "membership": "ad_hoc",
+        "isWheelchairUser": false,
+        "notes": ""
     },
     {
-        "id": 6,
-        "eventId": "event_101",
+        "uid": "user_006",
         "name": "Susan Tan",
         "caregiverName": "Kevin Tan",
         "email": "susan.tan@email.com",
         "phone": "+65 9678 9012",
-        "status": "registered",
-        "attendance": null
-    },
-    {
-        "id": 7,
-        "eventId": "event_102",
-        "name": "Emily Chen",
-        "caregiverName": "Michael Chen",
-        "email": "emily.chen@email.com",
-        "phone": "+65 9456 7890",
-        "status": "registered",
-        "attendance": null
-    },
-    {
-        "id": 8,
-        "eventId": "event_102",
-        "name": "David Wong",
-        "caregiverName": "Lisa Wong",
-        "email": "david.wong@email.com",
-        "phone": "+65 9567 8901",
-        "status": "registered",
-        "attendance": null
-    },
-    {
-        "id": 9,
-        "eventId": "event_102",
-        "name": "Susan Tan",
-        "caregiverName": "Kevin Tan",
-        "email": "susan.tan@email.com",
-        "phone": "+65 9678 9012",
-        "status": "registered",
-        "attendance": null
-    },
-    {
-        "id": 10,
-        "eventId": "event_103",
-        "name": "Emily Chen",
-        "caregiverName": "Michael Chen",
-        "email": "emily.chen@email.com",
-        "phone": "+65 9456 7890",
-        "status": "registered",
-        "attendance": null
-    },
-    {
-        "id": 11,
-        "eventId": "event_103",
-        "name": "David Wong",
-        "caregiverName": "Lisa Wong",
-        "email": "david.wong@email.com",
-        "phone": "+65 9567 8901",
-        "status": "registered",
-        "attendance": null
-    },
-    {
-        "id": 12,
-        "eventId": "event_103",
-        "name": "Susan Tan",
-        "caregiverName": "Kevin Tan",
-        "email": "susan.tan@email.com",
-        "phone": "+65 9678 9012",
-        "status": "registered",
-        "attendance": null
+        "membership": "weekly_3",
+        "isWheelchairUser": false,
+        "notes": "Loves music activities"
     }
 ]

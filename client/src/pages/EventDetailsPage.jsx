@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import activityImages from "../data/images.json";
 import participantsData from "../data/participants.json";
 import volunteersData from "../data/volunteers.json";
+import registrationsData from "../data/registrations.json";
+import "./EventDetailsPage.css";
 
 export default function EventDetailsPage() {
     const navigate = useNavigate();
@@ -11,82 +13,44 @@ export default function EventDetailsPage() {
 
     const [formData, setFormData] = useState({
         title: event?.title || "",
+        date: event?.start ? new Date(event.start).toISOString().slice(0, 10) : "",
         startTime: event?.start ? new Date(event.start).toTimeString().slice(0, 5) : "09:00",
         endTime: event?.end ? new Date(event.end).toTimeString().slice(0, 5) : "10:00",
         isWheelchairAccessible: event?.extendedProps?.isWheelchairAccessible || false,
         imageUrl: event?.extendedProps?.imageUrl || activityImages[0].url,
         contactIc: event?.extendedProps?.contactIc || "",
-        cost: event?.extendedProps?.cost || ""
+        cost: event?.extendedProps?.cost || "",
+        location: event?.extendedProps?.location || "",
+        description: event?.extendedProps?.description || ""
     });
 
-    // Load participants and volunteers for this event
     const [participants, setParticipants] = useState([]);
     const [volunteers, setVolunteers] = useState([]);
 
     useEffect(() => {
-    
         if (event?.id) {
-            // Filter participants and volunteers for this specific event
-            const eventParticipants = participantsData.filter(p => p.eventId == event.id);
-            const eventVolunteers = volunteersData.filter(v => v.eventId == event.id);
-            
-            // If no specific data found, show default participants/volunteers
-            if (eventParticipants.length === 0) {
-                setParticipants([
-                    {
-                        id: 1,
-                        name: "John Doe",
-                        caregiverName: "Jane Doe",
-                        email: "john.doe@email.com",
-                        phone: "+65 9123 4567",
-                        status: "registered",
-                        attendance: null
-                    },
-                    {
-                        id: 2,
-                        name: "Mary Smith",
-                        caregiverName: "Tom Smith",
-                        email: "mary.smith@email.com",
-                        phone: "+65 9234 5678",
-                        status: "registered",
-                        attendance: null
-                    },
-                    {
-                        id: 3,
-                        name: "Robert Lee",
-                        caregiverName: "Sarah Lee",
-                        email: "robert.lee@email.com",
-                        phone: "+65 9345 6789",
-                        status: "registered",
-                        attendance: null
-                    }
-                ]);
-            } else {
-                setParticipants(eventParticipants);
-            }
-            
-            if (eventVolunteers.length === 0) {
-                setVolunteers([
-                    {
-                        id: 1,
-                        name: "Alice Wong",
-                        email: "alice.wong@email.com",
-                        phone: "+65 8123 4567",
-                        status: "registered",
-                        attendance: null
-                    },
-                    {
-                        id: 2,
-                        name: "David Tan",
-                        email: "david.tan@email.com",
-                        phone: "+65 8234 5678",
-                        status: "registered",
-                        attendance: null
-                    }
-                ]);
-            } else {
-                setVolunteers(eventVolunteers);
-            }
+            const eventRegistrations = registrationsData.filter(reg => reg.eventId == event.id);
+            const participantRegistrations = eventRegistrations.filter(reg => reg.userId.startsWith('user_'));
+            const volunteerRegistrations = eventRegistrations.filter(reg => reg.userId.startsWith('vol_'));
+
+            const populatedParticipants = participantRegistrations.map(reg => {
+                const participantProfile = participantsData.find(p => p.uid === reg.userId);
+                return {
+                    ...participantProfile,
+                    ...reg
+                };
+            });
+
+            const populatedVolunteers = volunteerRegistrations.map(reg => {
+                const volunteerProfile = volunteersData.find(v => v.uid === reg.userId);
+                return {
+                    ...volunteerProfile,
+                    ...reg
+                };
+            });
+
+            setParticipants(populatedParticipants);
+            setVolunteers(populatedVolunteers);
         }
     }, [event?.id]);
 
@@ -98,14 +62,16 @@ export default function EventDetailsPage() {
         const updatedEvent = {
             ...event,
             title: formData.title,
-            start: `${event.start.split('T')[0]}T${formData.startTime}:00`,
-            end: `${event.end.split('T')[0]}T${formData.endTime}:00`,
+            start: `${formData.date}T${formData.startTime}:00`,
+            end: `${formData.date}T${formData.endTime}:00`,
             extendedProps: {
                 ...event.extendedProps,
                 isWheelchairAccessible: formData.isWheelchairAccessible,
                 imageUrl: formData.imageUrl,
                 contactIc: formData.contactIc,
-                cost: formData.cost === '' ? null : parseFloat(formData.cost)
+                cost: formData.cost === '' ? null : parseFloat(formData.cost),
+                location: formData.location,
+                description: formData.description
             }
         };
 
@@ -118,34 +84,34 @@ export default function EventDetailsPage() {
     };
 
     const handleParticipantStatusChange = (id, newStatus) => {
-        setParticipants(participants.map(p => 
+        setParticipants(participants.map(p =>
             p.id === id ? { ...p, status: newStatus } : p
         ));
     };
 
     const handleVolunteerStatusChange = (id, newStatus) => {
-        setVolunteers(volunteers.map(v => 
+        setVolunteers(volunteers.map(v =>
             v.id === id ? { ...v, status: newStatus } : v
         ));
     };
 
     const handleParticipantAttendanceChange = (id, attendance) => {
-        setParticipants(participants.map(p => 
+        setParticipants(participants.map(p =>
             p.id === id ? { ...p, attendance } : p
         ));
     };
 
     const handleVolunteerAttendanceChange = (id, attendance) => {
-        setVolunteers(volunteers.map(v => 
+        setVolunteers(volunteers.map(v =>
             v.id === id ? { ...v, attendance } : v
         ));
     };
 
     const sendConfirmations = () => {
-        const confirmedParticipants = participants.filter(p => 
+        const confirmedParticipants = participants.filter(p =>
             p.status === "confirmed" || p.status === "waitlisted"
         );
-        const confirmedVolunteers = volunteers.filter(v => 
+        const confirmedVolunteers = volunteers.filter(v =>
             v.status === "confirmed" || v.status === "waitlisted"
         );
 
@@ -175,7 +141,7 @@ export default function EventDetailsPage() {
         const totalRecorded = participantsWithAttendance.length + volunteersWithAttendance.length;
 
         setAttendanceMessage(`✅ Attendance submitted! Recorded ${totalRecorded} out of ${totalConfirmed} confirmed attendees.`);
-        
+
         setTimeout(() => setAttendanceMessage(""), 5000);
     };
 
@@ -184,132 +150,51 @@ export default function EventDetailsPage() {
     const confirmedVolunteers = volunteers.filter(v => v.status === "confirmed");
 
     return (
-        <div style={{ padding: "120px 32px 32px 32px" }}>
-            <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-                <button 
+        <div className="event-details-page">
+            <div className="event-details-container">
+                <button
                     onClick={() => navigate(-1)}
-                    style={{
-                        marginBottom: "20px",
-                        padding: "10px 20px",
-                        border: "1px solid #ddd",
-                        borderRadius: "8px",
-                        background: "white",
-                        cursor: "pointer"
-                    }}
+                    className="back-button"
                 >
                     ← Back to Calendar
                 </button>
 
-                <div style={{
-                    background: "white",
-                    padding: "30px",
-                    borderRadius: "16px",
-                    boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-                    marginBottom: "20px"
-                }}>
+                <div className="details-card">
                     <h2>Edit Event Details</h2>
-                    
-                    <div style={{ display: "grid", gap: "20px", marginTop: "20px" }}>
+
+                    <div className="form-grid">
                         <div>
-                            <label style={{ display: "block", marginBottom: "5px", fontWeight: "500" }}>
+                            <label className="form-label">
                                 Event Title
                             </label>
                             <input
                                 type="text"
                                 value={formData.title}
                                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                style={{
-                                    width: "100%",
-                                    padding: "10px",
-                                    border: "1px solid #ddd",
-                                    borderRadius: "8px"
-                                }}
+                                className="form-input"
                             />
                         </div>
 
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                            <div>
-                                <label style={{ display: "block", marginBottom: "5px", fontWeight: "500" }}>
-                                    Start Time
-                                </label>
-                                <input
-                                    type="time"
-                                    value={formData.startTime}
-                                    onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                                    style={{
-                                        width: "100%",
-                                        padding: "10px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "8px"
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <label style={{ display: "block", marginBottom: "5px", fontWeight: "500" }}>
-                                    End Time
-                                </label>
-                                <input
-                                    type="time"
-                                    value={formData.endTime}
-                                    onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                                    style={{
-                                        width: "100%",
-                                        padding: "10px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "8px"
-                                    }}
-                                />
-                            </div>
-                        </div>
-
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                            <div>
-                                <label style={{ display: "block", marginBottom: "5px", fontWeight: "500" }}>
-                                    Contact IC
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.contactIc}
-                                    onChange={(e) => setFormData({ ...formData, contactIc: e.target.value })}
-                                    style={{
-                                        width: "100%",
-                                        padding: "10px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "8px"
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <label style={{ display: "block", marginBottom: "5px", fontWeight: "500" }}>
-                                    Cost ($)
-                                </label>
-                                <input
-                                    type="number"
-                                    value={formData.cost}
-                                    onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
-                                    style={{
-                                        width: "100%",
-                                        padding: "10px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "8px"
-                                    }}
-                                />
-                            </div>
+                        <div>
+                            <label className="form-label">
+                                Description
+                            </label>
+                            <input
+                                type="text"
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                className="form-input"
+                            />
                         </div>
 
                         <div>
-                            <label style={{ display: "block", marginBottom: "5px", fontWeight: "500" }}>
+                            <label className="form-label">
                                 Activity Image
                             </label>
                             <select
                                 value={formData.imageUrl}
                                 onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                                style={{
-                                    width: "100%",
-                                    padding: "10px",
-                                    border: "1px solid #ddd",
-                                    borderRadius: "8px"
-                                }}
+                                className="form-select"
                             >
                                 {activityImages.map((img) => (
                                     <option key={img.id} value={img.url}>
@@ -319,32 +204,96 @@ export default function EventDetailsPage() {
                             </select>
                         </div>
 
+                        <div className="form-grid-col-3">
+                            <div>
+                                <label className="form-label">
+                                    Date
+                                </label>
+                                <input
+                                    type="date"
+                                    value={formData.date}
+                                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                    className="form-input"
+                                />
+                            </div>
+                            <div>
+                                <label className="form-label">
+                                    Start Time
+                                </label>
+                                <input
+                                    type="time"
+                                    value={formData.startTime}
+                                    onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                                    className="form-input"
+                                />
+                            </div>
+                            <div>
+                                <label className="form-label">
+                                    End Time
+                                </label>
+                                <input
+                                    type="time"
+                                    value={formData.endTime}
+                                    onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                                    className="form-input"
+                                />
+                            </div>
+                        </div>
+
                         <div>
-                            <label style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <label className="form-label">
+                                Location
+                            </label>
+                            <input
+                                type="text"
+                                value={formData.location}
+                                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                                className="form-input"
+                            />
+                        </div>
+
+                        <div className="form-grid-col-2">
+                            <div>
+                                <label className="form-label">
+                                    Contact IC
+                                </label>
+                                <input
+                                    type="text"
+                                    value={formData.contactIc}
+                                    onChange={(e) => setFormData({ ...formData, contactIc: e.target.value })}
+                                    className="form-input"
+                                />
+                            </div>
+                            <div>
+                                <label className="form-label">
+                                    Cost ($)
+                                </label>
+                                <input
+                                    type="number"
+                                    value={formData.cost}
+                                    onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                                    className="form-input"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="checkbox-label">
                                 <input
                                     type="checkbox"
                                     checked={formData.isWheelchairAccessible}
-                                    onChange={(e) => setFormData({ 
-                                        ...formData, 
-                                        isWheelchairAccessible: e.target.checked 
+                                    onChange={(e) => setFormData({
+                                        ...formData,
+                                        isWheelchairAccessible: e.target.checked
                                     })}
                                 />
-                                <span style={{ fontWeight: "500" }}>Wheelchair Accessible</span>
+                                <span>Wheelchair Accessible</span>
                             </label>
                         </div>
 
                         <button
                             onClick={handleSave}
-                            style={{
-                                padding: "12px 24px",
-                                background: "#4CAF50",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "8px",
-                                cursor: "pointer",
-                                fontWeight: "600",
-                                fontSize: "16px"
-                            }}
+                            className="save-button"
                         >
                             Save Changes
                         </button>
@@ -352,48 +301,38 @@ export default function EventDetailsPage() {
                 </div>
 
                 {/* Participants Section */}
-                <div style={{
-                    background: "white",
-                    padding: "30px",
-                    borderRadius: "16px",
-                    boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-                    marginBottom: "20px"
-                }}>
+                <div className="details-card">
                     <h2>Participants</h2>
-                    <table style={{ width: "100%", marginTop: "20px", borderCollapse: "collapse" }}>
+                    <table className="participants-table">
                         <thead>
-                            <tr style={{ borderBottom: "2px solid #ddd" }}>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Participant Name</th>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Caregiver Name</th>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Email</th>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Phone</th>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Status</th>
+                            <tr>
+                                <th>Participant Name</th>
+                                <th>Caregiver Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {participants.map((participant) => (
-                                <tr key={participant.id} style={{ borderBottom: "1px solid #eee" }}>
-                                    <td style={{ padding: "12px" }}>{participant.name}</td>
-                                    <td style={{ padding: "12px" }}>{participant.caregiverName}</td>
-                                    <td style={{ padding: "12px" }}>{participant.email}</td>
-                                    <td style={{ padding: "12px" }}>{participant.phone}</td>
-                                    <td style={{ padding: "12px" }}>
+                                <tr key={participant.id}>
+                                    <td>{participant.name}</td>
+                                    <td>{participant.caregiverName}</td>
+                                    <td>{participant.email}</td>
+                                    <td>{participant.phone}</td>
+                                    <td>
                                         <select
                                             value={participant.status}
                                             onChange={(e) => handleParticipantStatusChange(
-                                                participant.id, 
+                                                participant.id,
                                                 e.target.value
                                             )}
-                                            style={{
-                                                padding: "6px 12px",
-                                                border: "1px solid #ddd",
-                                                borderRadius: "6px",
-                                                background: participant.status === "confirmed" 
-                                                    ? "#d4edda" 
-                                                    : participant.status === "waitlisted" 
-                                                    ? "#fff3cd" 
-                                                    : "white"
-                                            }}
+                                            className={`status-select ${participant.status === "confirmed"
+                                                ? "status-confirmed"
+                                                : participant.status === "waitlisted"
+                                                    ? "status-waitlisted"
+                                                    : ""
+                                                }`}
                                         >
                                             <option value="registered">Registered</option>
                                             <option value="confirmed">Confirmed</option>
@@ -407,46 +346,36 @@ export default function EventDetailsPage() {
                 </div>
 
                 {/* Volunteers Section */}
-                <div style={{
-                    background: "white",
-                    padding: "30px",
-                    borderRadius: "16px",
-                    boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-                    marginBottom: "20px"
-                }}>
+                <div className="details-card">
                     <h2>Volunteers</h2>
-                    <table style={{ width: "100%", marginTop: "20px", borderCollapse: "collapse" }}>
+                    <table className="volunteers-table">
                         <thead>
-                            <tr style={{ borderBottom: "2px solid #ddd" }}>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Volunteer Name</th>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Email</th>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Phone</th>
-                                <th style={{ padding: "12px", textAlign: "left" }}>Status</th>
+                            <tr>
+                                <th>Volunteer Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {volunteers.map((volunteer) => (
-                                <tr key={volunteer.id} style={{ borderBottom: "1px solid #eee" }}>
-                                    <td style={{ padding: "12px" }}>{volunteer.name}</td>
-                                    <td style={{ padding: "12px" }}>{volunteer.email}</td>
-                                    <td style={{ padding: "12px" }}>{volunteer.phone}</td>
-                                    <td style={{ padding: "12px" }}>
+                                <tr key={volunteer.id}>
+                                    <td>{volunteer.name}</td>
+                                    <td>{volunteer.email}</td>
+                                    <td>{volunteer.phone}</td>
+                                    <td>
                                         <select
                                             value={volunteer.status}
                                             onChange={(e) => handleVolunteerStatusChange(
-                                                volunteer.id, 
+                                                volunteer.id,
                                                 e.target.value
                                             )}
-                                            style={{
-                                                padding: "6px 12px",
-                                                border: "1px solid #ddd",
-                                                borderRadius: "6px",
-                                                background: volunteer.status === "confirmed" 
-                                                    ? "#d4edda" 
-                                                    : volunteer.status === "waitlisted" 
-                                                    ? "#fff3cd" 
-                                                    : "white"
-                                            }}
+                                            className={`status-select ${volunteer.status === "confirmed"
+                                                ? "status-confirmed"
+                                                : volunteer.status === "waitlisted"
+                                                    ? "status-waitlisted"
+                                                    : ""
+                                                }`}
                                         >
                                             <option value="registered">Registered</option>
                                             <option value="confirmed">Confirmed</option>
@@ -460,38 +389,17 @@ export default function EventDetailsPage() {
                 </div>
 
                 {/* Send Confirmation Button */}
-                <div style={{
-                    background: "white",
-                    padding: "30px",
-                    borderRadius: "16px",
-                    boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-                    marginBottom: "20px",
-                    textAlign: "center"
-                }}>
+                <div className="details-card confirmation-section">
                     <button
                         onClick={sendConfirmations}
-                        style={{
-                            padding: "14px 32px",
-                            background: "#2196F3",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            fontWeight: "600",
-                            fontSize: "16px"
-                        }}
+                        className="send-confirmations-button"
                     >
                         Send Confirmations
                     </button>
 
                     {confirmationMessage && (
-                        <div style={{
-                            marginTop: "20px",
-                            padding: "15px",
-                            background: confirmationMessage.includes("✅") ? "#d4edda" : "#fff3cd",
-                            borderRadius: "8px",
-                            color: "#333"
-                        }}>
+                        <div className={`confirmation-message ${confirmationMessage.includes("✅") ? "success" : "warning"
+                            }`}>
                             {confirmationMessage}
                         </div>
                     )}
@@ -500,52 +408,42 @@ export default function EventDetailsPage() {
                 {/* Attendance Tracking Section - Only shows after confirmations sent */}
                 {confirmationsSent && (confirmedParticipants.length > 0 || confirmedVolunteers.length > 0) && (
                     <>
-                        <div style={{
-                            background: "white",
-                            padding: "30px",
-                            borderRadius: "16px",
-                            boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-                            marginBottom: "20px"
-                        }}>
+                        <div className="details-card attendance-section">
                             <h2>Track Attendance</h2>
-                            <p style={{ color: "#666", marginBottom: "20px" }}>
+                            <p>
                                 Record attendance for confirmed participants and volunteers
                             </p>
 
                             {/* Participants Attendance */}
                             {confirmedParticipants.length > 0 && (
                                 <>
-                                    <h3 style={{ marginTop: "20px", marginBottom: "10px" }}>Participants Attendance</h3>
-                                    <table style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}>
+                                    <h3>Participants Attendance</h3>
+                                    <table className="attendance-table">
                                         <thead>
-                                            <tr style={{ borderBottom: "2px solid #ddd" }}>
-                                                <th style={{ padding: "12px", textAlign: "left" }}>Name</th>
-                                                <th style={{ padding: "12px", textAlign: "left" }}>Email</th>
-                                                <th style={{ padding: "12px", textAlign: "left" }}>Attendance</th>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Attendance</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {confirmedParticipants.map((participant) => (
-                                                <tr key={participant.id} style={{ borderBottom: "1px solid #eee" }}>
-                                                    <td style={{ padding: "12px" }}>{participant.name}</td>
-                                                    <td style={{ padding: "12px" }}>{participant.email}</td>
-                                                    <td style={{ padding: "12px" }}>
+                                                <tr key={participant.id}>
+                                                    <td>{participant.name}</td>
+                                                    <td>{participant.email}</td>
+                                                    <td>
                                                         <select
                                                             value={participant.attendance || ""}
                                                             onChange={(e) => handleParticipantAttendanceChange(
-                                                                participant.id, 
+                                                                participant.id,
                                                                 e.target.value
                                                             )}
-                                                            style={{
-                                                                padding: "6px 12px",
-                                                                border: "1px solid #ddd",
-                                                                borderRadius: "6px",
-                                                                background: participant.attendance === "present" 
-                                                                    ? "#d4edda" 
-                                                                    : participant.attendance === "absent" 
-                                                                    ? "#f8d7da" 
-                                                                    : "white"
-                                                            }}
+                                                            className={`attendance-select ${participant.attendance === "present"
+                                                                ? "attendance-present"
+                                                                : participant.attendance === "absent"
+                                                                    ? "attendance-absent"
+                                                                    : ""
+                                                                }`}
                                                         >
                                                             <option value="">Not Recorded</option>
                                                             <option value="present">Present</option>
@@ -561,38 +459,34 @@ export default function EventDetailsPage() {
 
                             {/* Volunteers Attendance */}
                             {confirmedVolunteers.length > 0 && (
-                                <>
-                                    <h3 style={{ marginTop: "30px", marginBottom: "10px" }}>Volunteers Attendance</h3>
-                                    <table style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}>
+                                <div className="volunteers-attendance">
+                                    <h3>Volunteers Attendance</h3>
+                                    <table className="attendance-table">
                                         <thead>
-                                            <tr style={{ borderBottom: "2px solid #ddd" }}>
-                                                <th style={{ padding: "12px", textAlign: "left" }}>Name</th>
-                                                <th style={{ padding: "12px", textAlign: "left" }}>Email</th>
-                                                <th style={{ padding: "12px", textAlign: "left" }}>Attendance</th>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Attendance</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {confirmedVolunteers.map((volunteer) => (
-                                                <tr key={volunteer.id} style={{ borderBottom: "1px solid #eee" }}>
-                                                    <td style={{ padding: "12px" }}>{volunteer.name}</td>
-                                                    <td style={{ padding: "12px" }}>{volunteer.email}</td>
-                                                    <td style={{ padding: "12px" }}>
+                                                <tr key={volunteer.id}>
+                                                    <td>{volunteer.name}</td>
+                                                    <td>{volunteer.email}</td>
+                                                    <td>
                                                         <select
                                                             value={volunteer.attendance || ""}
                                                             onChange={(e) => handleVolunteerAttendanceChange(
-                                                                volunteer.id, 
+                                                                volunteer.id,
                                                                 e.target.value
                                                             )}
-                                                            style={{
-                                                                padding: "6px 12px",
-                                                                border: "1px solid #ddd",
-                                                                borderRadius: "6px",
-                                                                background: volunteer.attendance === "present" 
-                                                                    ? "#d4edda" 
-                                                                    : volunteer.attendance === "absent" 
-                                                                    ? "#f8d7da" 
-                                                                    : "white"
-                                                            }}
+                                                            className={`attendance-select ${volunteer.attendance === "present"
+                                                                ? "attendance-present"
+                                                                : volunteer.attendance === "absent"
+                                                                    ? "attendance-absent"
+                                                                    : ""
+                                                                }`}
                                                         >
                                                             <option value="">Not Recorded</option>
                                                             <option value="present">Present</option>
@@ -603,35 +497,18 @@ export default function EventDetailsPage() {
                                             ))}
                                         </tbody>
                                     </table>
-                                </>
+                                </div>
                             )}
 
                             <button
                                 onClick={submitAttendance}
-                                style={{
-                                    marginTop: "20px",
-                                    padding: "14px 32px",
-                                    background: "#FF9800",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "8px",
-                                    cursor: "pointer",
-                                    fontWeight: "600",
-                                    fontSize: "16px",
-                                    width: "100%"
-                                }}
+                                className="submit-attendance-button"
                             >
                                 Submit Attendance
                             </button>
 
                             {attendanceMessage && (
-                                <div style={{
-                                    marginTop: "20px",
-                                    padding: "15px",
-                                    background: "#d4edda",
-                                    borderRadius: "8px",
-                                    color: "#333"
-                                }}>
+                                <div className="attendance-message">
                                     {attendanceMessage}
                                 </div>
                             )}

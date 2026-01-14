@@ -46,9 +46,6 @@ const StaffCalendar = () => {
     };
 
     const handleEventClick = (clickInfo) => {
-        console.log('Event clicked!', clickInfo.event.title); // Debug log
-        
-        // Get the event data
         const eventData = {
             id: clickInfo.event.id,
             title: clickInfo.event.title,
@@ -57,9 +54,6 @@ const StaffCalendar = () => {
             extendedProps: clickInfo.event.extendedProps
         };
         
-        console.log('Navigating with event:', eventData); // Debug log
-        
-        // Navigate to event details page
         navigate('/event-details', {
             state: { event: eventData }
         });
