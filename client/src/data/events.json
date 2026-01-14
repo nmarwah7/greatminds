@@ -11,7 +11,9 @@
             "isWheelchairAccessible": true,
             "minDaysRequired": 1,
             "contactIC": "12345678",
-            "cost": 5
+            "cost": 5,
+            "location": "Community Center Room 1",
+            "description": "A workshop to practice mindfulness and meditation techniques."
         }
     },
     {
@@ -26,7 +28,9 @@
             "isWheelchairAccessible": true,
             "minDaysRequired": 3,
             "contactIC": "12345678",
-            "cost": 5
+            "cost": 5,
+            "location": "Community Center Room 2",
+            "description": "A weekly program focusing on physical activities and social engagement for seniors."
         }
     },
     {
@@ -41,7 +45,9 @@
             "isWheelchairAccessible": true,
             "minDaysRequired": 3,
             "contactIC": "12345678",
-            "cost": 5
+            "cost": 5,
+            "location": "Community Center Room 2",
+            "description": "A weekly program focusing on physical activities and social engagement for seniors."
         }
     },
     {
@@ -56,7 +62,9 @@
             "isWheelchairAccessible": true,
             "minDaysRequired": 3,
             "contactIC": "12345678",
-            "cost": 5
+            "cost": 5,
+            "location": "Community Center Room 2",
+            "description": "A weekly program focusing on physical activities and social engagement for seniors."
         }
     }
 ]

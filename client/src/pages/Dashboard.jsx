@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import ParticipantCalendar from "../components/ParticipantCalendar";
 import StaffCalendar from "../components/StaffCalendar";
 
 export default function Dashboard() {
@@ -40,7 +41,9 @@ export default function Dashboard() {
                     Log out
                 </button>
             </div>
-            
+
+            <ParticipantCalendar />
+
             <StaffCalendar />
         </div>
     );

@@ -48,8 +48,8 @@ export default function CreateEventModal({
                     <input
                         type="text"
                         placeholder="e.g., Jane Doe"
-                        value={formData.contactIc}
-                        onChange={(e) => setFormData({ ...formData, contactIc: e.target.value })}
+                        value={formData.contactIC}
+                        onChange={(e) => setFormData({ ...formData, contactIC: e.target.value })}
                     />
 
                     <label>Cost</label>
@@ -60,6 +60,22 @@ export default function CreateEventModal({
                         placeholder="e.g., 10.00"
                         value={formData.cost}
                         onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                    />
+
+                    <label>Location</label>
+                    <input
+                        type="text"
+                        placeholder="e.g., Community Hall Room 2"
+                        value={formData.location}
+                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    />
+
+                    <label>Description</label>
+                    <textarea
+                        rows={3}
+                        placeholder="Brief description of the activity"
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     />
 
                     <label>Repeat on:</label>

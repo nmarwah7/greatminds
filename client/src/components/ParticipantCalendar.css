@@ -1,0 +1,99 @@
+.participant-event-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2px;
+}
+
+.event-img-large {
+    width: 100%;
+    height: 60px; /* Much larger than staff view */
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.day-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #eee;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.day-item.selected {
+    border-color: #007bff;
+    background-color: #e7f3ff;
+}
+
+/* Detail View Modal Specifics */
+.detail-view {
+    padding: 0 !important;
+    overflow-y: auto;
+    width: 450px;
+}
+
+.modal-image-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+}
+
+.modal-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.accessibility-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: #007bff;
+    font-size: 0.9rem;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.info-section p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #444;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.select-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.series-note {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    strong {
+        font-weight: 600;
+    }
+}

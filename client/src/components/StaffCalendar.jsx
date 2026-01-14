@@ -5,6 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import initialEvents from '../data/events.json';
 import activityImages from '../data/images.json';
 import './StaffCalendar.css';
+import CalendarEventCard from './CalendarEventCard';
 import CreateEventModal from './CreateEventModal';
 
 const DAYS = [
@@ -30,8 +31,10 @@ const StaffCalendar = () => {
         selectedImage: activityImages[0].url,
         selectedDays: [],
         commitment: 1,
-        contactIc: '',
-        cost: ''
+        contactIC: '',
+        cost: '',
+        location: '',
+        description: ''
     });
 
     const handleDateClick = (arg) => {
@@ -65,9 +68,11 @@ const StaffCalendar = () => {
                 extendedProps: {
                     isWheelchairAccessible: formData.isWheelchairAccessible,
                     imageUrl: formData.selectedImage,
-                    minCommitment: 1,
-                    contactIc: formData.contactIc,
-                    cost: Number.isFinite(costValue) ? costValue : null
+                    minDaysRequired: 1,
+                    contactIC: formData.contactIC,
+                    cost: Number.isFinite(costValue) ? costValue : null,
+                    location: formData.location,
+                    description: formData.description
                 }
             });
         } else {
@@ -89,9 +94,11 @@ const StaffCalendar = () => {
                     extendedProps: {
                         isWheelchairAccessible: formData.isWheelchairAccessible,
                         imageUrl: formData.selectedImage,
-                        minCommitment: formData.commitment,
-                        contactIc: formData.contactIc,
-                        cost: Number.isFinite(costValue) ? costValue : null
+                        minDaysRequired: formData.commitment,
+                        contactIC: formData.contactIC,
+                        cost: Number.isFinite(costValue) ? costValue : null,
+                        location: formData.location,
+                        description: formData.description
                     }
                 });
             });
@@ -108,23 +115,21 @@ const StaffCalendar = () => {
             selectedImage: activityImages[0].url,
             selectedDays: [],
             commitment: 1,
-            contactIc: '',
-            cost: ''
+            contactIC: '',
+            cost: '',
+            location: '',
+            description: ''
         });
     };
 
     const renderEventContent = (eventInfo) => {
         const { imageUrl, isWheelchairAccessible } = eventInfo.event.extendedProps;
         return (
-            <div className="event-card" title={eventInfo.event.title}>
-                <img className="event-thumb" src={imageUrl} alt="event" />
-                <div className="event-bottom">
-                    <span className="event-title">{eventInfo.event.title}</span>
-                    {isWheelchairAccessible && (
-                        <span className="badge badge-access" aria-label="Wheelchair accessible">♿</span>
-                    )}
-                </div>
-            </div>
+            <CalendarEventCard
+              title={eventInfo.event.title}
+              imageUrl={imageUrl}
+              isWheelchairAccessible={isWheelchairAccessible}
+            />
         );
     };
 

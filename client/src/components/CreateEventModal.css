@@ -82,6 +82,7 @@
     font-size: 14px;
     outline: none;
     width: 100%;
+    box-sizing: border-box;
     background: #fff;
 }
 
@@ -89,6 +90,11 @@
 .modal-body textarea:focus {
     border-color: #19d3da;
     box-shadow: 0 0 0 2px rgba(25, 211, 218, 0.25);
+}
+
+.modal-body textarea {
+    resize: vertical;
+    min-height: 56px;
 }
 
 /* Two-column time row */
