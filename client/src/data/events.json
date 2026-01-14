@@ -9,7 +9,9 @@
         "extendedProps": {
             "imageUrl": "https://placehold.co/100x100?text=Art",
             "isWheelchairAccessible": true,
-            "minDaysRequired": 1
+            "minDaysRequired": 1,
+            "contactIC": "12345678",
+            "cost": 5
         }
     },
     {
@@ -22,7 +24,9 @@
         "extendedProps": {
             "imageUrl": "https://placehold.co/100x100?text=Ser",
             "isWheelchairAccessible": true,
-            "minDaysRequired": 3
+            "minDaysRequired": 3,
+            "contactIC": "12345678",
+            "cost": 5
         }
     },
     {
@@ -35,7 +39,9 @@
         "extendedProps": {
             "imageUrl": "https://placehold.co/100x100?text=Ser",
             "isWheelchairAccessible": true,
-            "minDaysRequired": 3
+            "minDaysRequired": 3,
+            "contactIC": "12345678",
+            "cost": 5
         }
     },
     {
@@ -48,7 +54,9 @@
         "extendedProps": {
             "imageUrl": "https://placehold.co/100x100?text=Ser",
             "isWheelchairAccessible": true,
-            "minDaysRequired": 3
+            "minDaysRequired": 3,
+            "contactIC": "12345678",
+            "cost": 5
         }
     }
 ]

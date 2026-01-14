@@ -5,6 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import initialEvents from '../data/events.json';
 import activityImages from '../data/images.json';
 import './StaffCalendar.css';
+import CreateEventModal from './CreateEventModal';
 
 const DAYS = [
     { label: 'Mon', value: 1 },
@@ -28,7 +29,9 @@ const StaffCalendar = () => {
         isWheelchairAccessible: false,
         selectedImage: activityImages[0].url,
         selectedDays: [],
-        commitment: 1
+        commitment: 1,
+        contactIc: '',
+        cost: ''
     });
 
     const handleDateClick = (arg) => {
@@ -47,6 +50,7 @@ const StaffCalendar = () => {
 
     const handleSave = () => {
         const isMultiDay = formData.selectedDays.length > 1;
+        const costValue = formData.cost === '' ? null : Number.parseFloat(formData.cost);
         const seriesId = isMultiDay ? `series_${Date.now()}` : null;
         const newEventsBatch = [];
 
@@ -61,7 +65,9 @@ const StaffCalendar = () => {
                 extendedProps: {
                     isWheelchairAccessible: formData.isWheelchairAccessible,
                     imageUrl: formData.selectedImage,
-                    minCommitment: 1
+                    minCommitment: 1,
+                    contactIc: formData.contactIc,
+                    cost: Number.isFinite(costValue) ? costValue : null
                 }
             });
         } else {
@@ -83,7 +89,9 @@ const StaffCalendar = () => {
                     extendedProps: {
                         isWheelchairAccessible: formData.isWheelchairAccessible,
                         imageUrl: formData.selectedImage,
-                        minCommitment: formData.commitment
+                        minCommitment: formData.commitment,
+                        contactIc: formData.contactIc,
+                        cost: Number.isFinite(costValue) ? costValue : null
                     }
                 });
             });
@@ -99,17 +107,23 @@ const StaffCalendar = () => {
             isWheelchairAccessible: false,
             selectedImage: activityImages[0].url,
             selectedDays: [],
-            commitment: 1
+            commitment: 1,
+            contactIc: '',
+            cost: ''
         });
     };
 
     const renderEventContent = (eventInfo) => {
         const { imageUrl, isWheelchairAccessible } = eventInfo.event.extendedProps;
         return (
-            <div className="event-card">
-                <img src={imageUrl} alt="event" style={{ width: '30px', borderRadius: '4px' }} />
-                <span>{eventInfo.event.title}</span>
-                {isWheelchairAccessible && <span> ♿</span>}
+            <div className="event-card" title={eventInfo.event.title}>
+                <img className="event-thumb" src={imageUrl} alt="event" />
+                <div className="event-bottom">
+                    <span className="event-title">{eventInfo.event.title}</span>
+                    {isWheelchairAccessible && (
+                        <span className="badge badge-access" aria-label="Wheelchair accessible">♿</span>
+                    )}
+                </div>
             </div>
         );
     };
@@ -128,81 +142,16 @@ const StaffCalendar = () => {
             />
 
             {isModalOpen && (
-                <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h3>New Activity for {formData.startDate}</h3>
-
-                        <label>Select Activity Icon</label>
-                        <div className="image-grid">
-                            {activityImages.map((img) => (
-                                <div
-                                    key={img.label}
-                                    className={`image-tile ${formData.selectedImage === img.url ? 'active' : ''}`}
-                                    onClick={() => setFormData({ ...formData, selectedImage: img.url })}
-                                >
-                                    <img src={img.url} alt={img.label} />
-                                    <span>{img.label}</span>
-                                </div>
-                            ))}
-                        </div>
-
-                        <label>Program Title</label>
-                        <input type="text" value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
-
-                        <label>Repeat on:</label>
-                        <div className="weekday-chips">
-                            {DAYS.map(day => (
-                                <button
-                                    key={day.value}
-                                    className={formData.selectedDays.includes(day.value) ? 'active' : ''}
-                                    onClick={() => toggleDay(day.value)}
-                                >
-                                    {day.label}
-                                </button>
-                            ))}
-                        </div>
-
-                        {formData.selectedDays.length > 1 && (
-                            <>
-                                <label>Commitment Requirement:</label>
-                                <div className="commitment-input">
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max={formData.selectedDays.length}
-                                        value={formData.commitment}
-                                        onChange={(e) => setFormData({ ...formData, commitment: parseInt(e.target.value) })}
-                                    />
-                                </div>
-                            </>
-                        )}
-
-                        <div className="time-row">
-                            <div>
-                                <label>Start Time</label>
-                                <input type="time" value={formData.startTime}
-                                    onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} />
-                            </div>
-                            <div>
-                                <label>End Time</label>
-                                <input type="time" value={formData.endTime}
-                                    onChange={(e) => setFormData({ ...formData, endTime: e.target.value })} />
-                            </div>
-                        </div>
-
-                        <label className="checkbox-label">
-                            <input type="checkbox" checked={formData.isWheelchairAccessible}
-                                onChange={(e) => setFormData({ ...formData, isWheelchairAccessible: e.target.checked })} />
-                            Wheelchair Accessible
-                        </label>
-
-                        <div className="modal-actions">
-                            <button className="save-btn" onClick={handleSave}>Save Activity</button>
-                            <button className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                        </div>
-                    </div>
-                </div>
+                <CreateEventModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    formData={formData}
+                    setFormData={setFormData}
+                    DAYS={DAYS}
+                    activityImages={activityImages}
+                    toggleDay={toggleDay}
+                    onSave={handleSave}
+                />
             )}
         </div>
     );

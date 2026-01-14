@@ -1,0 +1,235 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    color: #0b3c91;
+    width: 480px;
+    max-width: 95%;
+    padding: 16px 16px 12px 16px;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    overflow: hidden;
+    gap: 16px;
+    animation: modalFadeIn 200ms ease-out;
+    overflow-wrap: anywhere;
+}
+
+.modal-header {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 4px 8px 4px;
+    border-bottom: 1px solid #eee;
+    z-index: 1;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #0b3c91;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 8px;
+}
+
+.modal-close:hover {
+    background: #f2f6ff;
+}
+
+.modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px 4px 0 4px;
+}
+
+/* Labels and inputs */
+.modal-body label:not(.checkbox-label) {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0b3c91;
+    margin-bottom: 6px;
+}
+
+.modal-body input,
+.modal-body textarea {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    background: #fff;
+}
+
+.modal-body input:focus,
+.modal-body textarea:focus {
+    border-color: #19d3da;
+    box-shadow: 0 0 0 2px rgba(25, 211, 218, 0.25);
+}
+
+/* Two-column time row */
+.time-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Checkbox label */
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0b3c91;
+    line-height: 1;
+    margin: 2px 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin: 0;
+    width: 16px;
+    vertical-align: middle;
+    transform: scale(0.85);
+    transform-origin: center;
+    accent-color: #0b3c91;
+}
+
+/* Image selection grid */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.image-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid #e7eef5;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.image-tile.active {
+    border-color: #19d3da;
+    box-shadow: 0 0 0 2px rgba(25, 211, 218, 0.25);
+}
+
+.image-tile img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.image-tile span {
+    font-size: 12px;
+    color: #0b3c91;
+    font-weight: 600;
+}
+
+/* Weekday chips */
+.weekday-chips {
+    margin-top: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.weekday-chips button {
+    padding: 6px 10px;
+    border: 1px solid #e7eef5;
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    color: #0b3c91;
+    font-weight: 600;
+}
+
+.weekday-chips button.active {
+    background: #e8fbff;
+    color: #0b3c91;
+    border-color: #19d3da;
+}
+
+.commitment-input {
+    margin-top: 0px;
+}
+
+.commitment-input input {
+    margin-top: 0px;
+    width: 100px;
+}
+
+/* Actions */
+.modal-actions {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 0;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+}
+
+.save-btn {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    background: linear-gradient(90deg, #19d3da, #0b3c91);
+    color: #fff;
+}
+
+.cancel-btn {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    background: #f3f3f3;
+    color: #333;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
