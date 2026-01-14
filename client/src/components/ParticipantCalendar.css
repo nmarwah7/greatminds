@@ -1,3 +1,55 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    color: #0b3c91;
+    width: 520px;
+    max-width: 95%;
+    padding: 16px;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    overflow: auto;
+}
+
+.summary-modal .summary-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.summary-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border: 1px solid #e7eef5;
+    border-radius: 10px;
+}
+
+.total-section {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .participant-event-card {
     display: flex;
     flex-direction: column;
@@ -96,4 +148,111 @@
     strong {
         font-weight: 600;
     }
+}
+
+/* ========== Basket Modal Styles ========== */
+.basket-sidebar {
+    position: fixed;
+    right: 0; top: 0; width: 300px; height: 100%;
+    background: white;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    padding: 20px;
+    z-index: 1000;
+}
+
+.basket-sidebar h3 {
+    margin: 0 0 12px 0;
+    font-size: 1.1rem;
+    color: #0b3c91;
+}
+
+.basket-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 8px 10px;
+    border: 1px solid #e7eef5;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: #fff;
+}
+
+.basket-item button {
+    border: none;
+    background: #ffe6e6;
+    color: #c0392b;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.basket-item button:hover {
+    background: #ffd1d1;
+}
+
+.warning-text {
+    color: #dc3545;
+    font-size: 0.85rem;
+    background: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 12px;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.checkout-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.confirm-pay-btn {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #19d3da, #0b3c91);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.summary-container h1 {
+    margin: 8px 0 12px 0;
+}
+
+.summary-card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.toast {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1100;
+    padding: 10px 14px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    color: #fff;
+    animation: fadeSlideIn 200ms ease-out;
+}
+
+.toast-success { background: #28a745; }
+.toast-error { background: #dc3545; }
+.toast-info { background: #0b3c91; }
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
 }

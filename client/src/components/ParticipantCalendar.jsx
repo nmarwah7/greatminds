@@ -5,16 +5,21 @@ import interactionPlugin from '@fullcalendar/interaction';
 import initialEvents from '../data/events.json';
 import './ParticipantCalendar.css';
 import CalendarEventCard from './CalendarEventCard';
-import RegistrationModal from './RegistrationModal';
 
 const ParticipantCalendar = () => {
     const [events, setEvents] = useState(initialEvents);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
 
-    const [selectedSeries, setSelectedSeries] = useState([]);
-    const [isRegModalOpen, setIsRegModalOpen] = useState(false);
-    const [activeEvent, setActiveEvent] = useState(null);
+    const [basket, setBasket] = useState([]);
+    const [isBasketOpen, setIsBasketOpen] = useState(false);
+    const [currentView, setCurrentView] = useState('basket'); // 'basket' or 'summary'
+    const [alert, setAlert] = useState(null); // { message, type: 'success'|'error'|'info' }
+
+    const showAlert = (message, type = 'info') => {
+        setAlert({ message, type });
+        setTimeout(() => setAlert(null), 3000);
+    };
 
     // Helper function to flatten event data into a simple shape
     const flattenEvent = (event) => {
@@ -35,6 +40,38 @@ const ParticipantCalendar = () => {
         setIsDetailModalOpen(true);
     };
 
+    const handleSelectEvent = (event) => {
+        if (basket.some(e => e.id === event.id)) {
+            showAlert("This event is already in your selected activities.", 'error');
+            return;
+        }
+        setBasket([...basket, event]);
+        setIsDetailModalOpen(false);
+        setIsBasketOpen(true);
+        setCurrentView('basket');
+        showAlert("Added to your selection.", 'success');
+    }
+
+    const onRemove = (eventId) => {
+        const newBasket = basket.filter(item => item.id !== eventId);
+        setBasket(newBasket);
+        if (newBasket.length === 0) {
+            setIsBasketOpen(false);
+            setCurrentView('calendar');
+        }
+    };
+
+    const onCheckout = () => {
+        setCurrentView('summary');
+    };
+
+    const handleFinalConfirm = () => {
+        showAlert("Success! Your registration is complete and staff have been notified.", 'success');
+        setBasket([]);
+        setIsBasketOpen(false);
+        setCurrentView('calendar');
+    };
+
     const renderEventContent = (eventInfo) => {
         const { imageUrl, isWheelchairAccessible } = eventInfo.event.extendedProps;
         return (
@@ -46,16 +83,115 @@ const ParticipantCalendar = () => {
         );
     };
 
+    const BasketView = ({ basket, onRemove, onCheckout }) => {
+        const validateCommitments = () => {
+            const groups = basket.reduce((acc, item) => {
+                if (item.isSeries) {
+                    acc[item.seriesId] = (acc[item.seriesId] || 0) + 1;
+                }
+                return acc;
+            }, {});
+
+            for (const item of basket) {
+                if (item.isSeries) {
+                    const count = groups[item.seriesId];
+                    if (count !== item.minDaysRequired) {
+                        return {
+                            valid: false,
+                            msg: `You must select exactly ${item.minDaysRequired} days for "${item.title}". You have selected ${count}.`
+                        };
+                    }
+                }
+            }
+            return { valid: true, msg: '' };
+        };
+
+        const validation = validateCommitments();
+
+        return (
+            <div className="basket-sidebar">
+                <h3>Your Selection ({basket.length})</h3>
+                {basket.map(item => (
+                    <div key={item.id} className="basket-item">
+                        <span>{item.title} - {new Date(item.start).toLocaleDateString()}</span>
+                        <button onClick={() => onRemove(item.id)}>❌</button>
+                    </div>
+                ))}
+
+                {!validation.valid && (
+                    <p className="warning-text">{validation.msg}</p>
+                )}
+
+                <button
+                    className="checkout-btn"
+                    disabled={!validation.valid || basket.length === 0}
+                    onClick={onCheckout}
+                >
+                    Confirm & Pay
+                </button>
+            </div>
+        );
+    }
+
+    const SummaryScreen = ({ basket, onBack, onConfirm }) => {
+        return (
+            <div className="summary-container">
+                <button onClick={onBack}>← Back to Calendar</button>
+                <h1>Review Your Registration</h1>
+
+                <div className="summary-list">
+                    {basket.map(item => (
+                        <div key={item.id} className="summary-card">
+                            <img src={item.imageUrl} alt="" style={{ width: '50px' }} />
+                            <div>
+                                <h3>{item.title}</h3>
+                                <p>{new Date(item.start).toLocaleDateString()} at {new Date(item.start).toLocaleTimeString()}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="total-section">
+                    <p>Total Activities: {basket.length}</p>
+                    <button className="confirm-pay-btn" onClick={onConfirm}>
+                        Confirm and Book
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="participant-container">
+            {alert && (
+                <div className={`toast toast-${alert.type}`}>
+                    {alert.message}
+                </div>
+            )}
             <header className="participant-header">
                 <h1>Available Activities</h1>
                 <p>Click on a picture to sign up!</p>
             </header>
 
-            <header className="participant-selected-info">
-                <h1>Selected Events: {selectedSeries.length}</h1>
-            </header>
+            {currentView === 'basket' && isBasketOpen && (
+                <BasketView
+                    basket={basket}
+                    onRemove={onRemove}
+                    onCheckout={onCheckout}
+                />
+            )}
+
+            {currentView === 'summary' && (
+                <div className="modal-overlay" onClick={() => setCurrentView('basket')}>
+                    <div className="modal-content summary-modal" onClick={(e) => e.stopPropagation()}>
+                        <SummaryScreen
+                            basket={basket}
+                            onBack={() => setCurrentView('basket')}
+                            onConfirm={handleFinalConfirm}
+                        />
+                    </div>
+                </div>
+            )}
 
             <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
@@ -102,7 +238,7 @@ const ParticipantCalendar = () => {
                         </div>
 
                         <div className="modal-actions">
-                            <button className="select-btn" onClick={() => alert("Moving to selection logic...")}>
+                            <button className="select-btn" onClick={() => handleSelectEvent(selectedEvent)}>
                                 Select Activity
                             </button>
                             <button className="cancel-btn" onClick={() => setIsDetailModalOpen(false)}>
@@ -111,14 +247,6 @@ const ParticipantCalendar = () => {
                         </div>
                     </div>
                 </div>
-            )}
-
-            {isRegModalOpen && (
-                <RegistrationModal
-                    event={activeEvent}
-                    seriesDays={selectedSeries}
-                    onClose={() => setIsRegModalOpen(false)}
-                />
             )}
         </div>
     );
