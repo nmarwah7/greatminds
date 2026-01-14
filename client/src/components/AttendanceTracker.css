@@ -1,0 +1,86 @@
+/* Styling for the AttendanceTracker component */
+
+.attendance-section {
+    border-top: 2px dashed #e2e8f0;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.attendance-section h2 {
+    color: #2d3748;
+}
+
+.attendance-section p {
+    color: #718096;
+    margin-bottom: 20px;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.attendance-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.volunteers-attendance {
+    margin-top: 30px;
+}
+
+.attendance-select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.attendance-present {
+    background-color: #c6f6d5;
+    color: #2f855a;
+    border-color: #9ae6b4;
+}
+
+.attendance-absent {
+    background-color: #fed7d7;
+    color: #c53030;
+    border-color: #feb2b2;
+}
+
+.submit-attendance-button {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 20px auto 0;
+    padding: 12px 24px;
+    background-color: #2f855a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-attendance-button:hover {
+    background-color: #276749;
+}
+
+.attendance-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #e6fffa;
+    color: #2c7a7b;
+    text-align: center;
+}

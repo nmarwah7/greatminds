@@ -1,0 +1,43 @@
+/* Styling for the RosterTable component */
+
+.roster-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.roster-table th,
+.roster-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.roster-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.roster-table tbody tr:hover {
+    background-color: #f7fafc;
+}
+
+.status-select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.status-confirmed {
+    background-color: #c6f6d5;
+    color: #2f855a;
+    border-color: #9ae6b4;
+}
+
+.status-waitlisted {
+    background-color: #feebc8;
+    color: #975a16;
+    border-color: #fbd38d;
+}
