@@ -13,7 +13,15 @@
             "contactIC": "12345678",
             "cost": 5,
             "location": "Community Center Room 1",
-            "description": "A workshop to practice mindfulness and meditation techniques."
+            "description": "A workshop to practice mindfulness and meditation techniques.",
+            "volunteerInfo": {
+                "tasksDescription": "Help set up meditation mats, assist participants with seating, serve refreshments during break",
+                "staffPresent": ["Sarah Johnson", "Michael Lee", "Grace Tan"],
+                "contactICName": "Sarah Johnson",
+                "contactICPhone": "+65 9876 5432",
+                "meetingPoint": "Woodlands MRT Exit 1 at 9:45am",
+                "isVolunteerFull": true
+            }
         }
     },
     {
@@ -30,7 +38,15 @@
             "contactIC": "12345678",
             "cost": 5,
             "location": "Community Center Room 2",
-            "description": "A weekly program focusing on physical activities and social engagement for seniors."
+            "description": "A weekly program focusing on physical activities and social engagement for seniors.",
+            "volunteerInfo": {
+                "tasksDescription": "Assist with exercise equipment setup, guide seniors through light exercises, facilitate group activities",
+                "staffPresent": ["Jennifer Wong", "David Chen", "Rachel Ng"],
+                "contactICName": "Jennifer Wong",
+                "contactICPhone": "+65 9123 8765",
+                "meetingPoint": "Yishun MRT Exit 2 at 11:30am",
+                "isVolunteerFull": false
+            }
         }
     },
     {
@@ -47,7 +63,15 @@
             "contactIC": "12345678",
             "cost": 5,
             "location": "Community Center Room 2",
-            "description": "A weekly program focusing on physical activities and social engagement for seniors."
+            "description": "A weekly program focusing on physical activities and social engagement for seniors.",
+            "volunteerInfo": {
+                "tasksDescription": "Help with game setup, engage seniors in board games and card games, assist with mobility",
+                "staffPresent": ["Jennifer Wong", "Kevin Tan", "Lisa Koh"],
+                "contactICName": "Jennifer Wong",
+                "contactICPhone": "+65 9123 8765",
+                "meetingPoint": "Yishun MRT Exit 2 at 11:30am",
+                "isVolunteerFull": false
+            }
         }
     },
     {
@@ -64,7 +88,15 @@
             "contactIC": "12345678",
             "cost": 5,
             "location": "Community Center Room 2",
-            "description": "A weekly program focusing on physical activities and social engagement for seniors."
+            "description": "A weekly program focusing on physical activities and social engagement for seniors.",
+            "volunteerInfo": {
+                "tasksDescription": "Support arts and crafts activities, help distribute materials, assist seniors with painting and drawing",
+                "staffPresent": ["Jennifer Wong", "Amy Lim", "Thomas Yeo"],
+                "contactICName": "Jennifer Wong",
+                "contactICPhone": "+65 9123 8765",
+                "meetingPoint": "Yishun MRT Exit 2 at 11:30am",
+                "isVolunteerFull": true
+            }
         }
     }
 ]

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import ParticipantCalendar from "../components/ParticipantCalendar";
 import StaffCalendar from "../components/StaffCalendar";
+import VolunteerCalendar from "../components/VolunteerCalendar";
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -12,19 +13,7 @@ export default function Dashboard() {
                 return <StaffCalendar />;
             
             case "Volunteer":
-                return (
-                    <div style={{ 
-                        background: "white", 
-                        padding: "40px", 
-                        borderRadius: "16px",
-                        textAlign: "center",
-                        marginTop: "20px",
-                        boxShadow: "0 6px 20px rgba(0,0,0,0.08)"
-                    }}>
-                        <h2>Volunteer Dashboard</h2>
-                        <p style={{ color: "#666" }}>Volunteer view coming soon...</p>
-                    </div>
-                );
+                return <VolunteerCalendar />;
             
             case "Participant":
                 return <ParticipantCalendar />
