@@ -1,21 +1,28 @@
+import React from 'react';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 import ParticipantCalendar from "../components/ParticipantCalendar";
 import StaffCalendar from "../components/StaffCalendar";
 import VolunteerCalendar from "../components/VolunteerCalendar";
 
 export default function Dashboard() {
     const navigate = useNavigate();
-    const role = localStorage.getItem("role");
+    const { role, loading, user } = useAuth();
+
+    if (!user) {
+        navigate("/login");
+        return null;
+    }
 
     const renderDashboardContent = () => {
-        switch(role) {
-            case "Staff":
+        switch(role?.toLowerCase()) {
+            case "staff":
                 return <StaffCalendar />;
             
-            case "Volunteer":
+            case "volunteer":
                 return <VolunteerCalendar />;
             
-            case "Participant":
+            case "participant":
                 return <ParticipantCalendar />
             
             default:
@@ -37,7 +44,7 @@ export default function Dashboard() {
                 }}
             >
                 <div>
-                    <h2 style={{ margin: 0 }}>Hello, user details</h2>
+                    <h2 style={{ margin: 0 }}>Welcome, {user.email} ({role})</h2>
                     <p style={{ margin: 0, color: "#555" }}>
                         Logged in as <strong>{role}</strong>
                     </p>

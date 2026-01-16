@@ -293,6 +293,9 @@ const ParticipantCalendar = () => {
                             {selectedEvent.isWheelchairAccessible && (
                                 <div className="accessibility-badge">♿ Wheelchair Accessible</div>
                             )}
+                            {!selectedEvent.isWheelchairAccessible && (
+                                <div className="accessibility-badge">!! Not Wheelchair Accessible</div>
+                            )}
                         </div>
 
                         <div className="modal-body">
@@ -305,6 +308,7 @@ const ParticipantCalendar = () => {
                                     ? `${selectedEvent.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${selectedEvent.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
                                     : 'All day'}</p>
                                 <p><strong>📍 Location:</strong> {selectedEvent.location || 'TBA'}</p>
+                                <p><strong>📍Meeting Point:</strong> {selectedEvent.meetingPoint || 'TBA'}</p>
                                 <p><strong>📞 Contact Person:</strong> {selectedEvent.contactICName}</p>
                                 <p><strong>📱 Contact Phone:</strong> {selectedEvent.contactICPhone}</p>
                                 <p><strong>💲 Cost:</strong> {selectedEvent.cost ? `$${selectedEvent.cost.toFixed(2)}` : 'Free'}</p>

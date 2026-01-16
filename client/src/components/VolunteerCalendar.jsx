@@ -237,7 +237,7 @@ const VolunteerCalendar = () => {
                                     <div className="volunteer-details">
                                         <p><strong>📋 Tasks:</strong> {selectedEvent.volunteerInfo.tasksDescription}</p>
 
-                                        <p><strong>👥 Staff Present:</strong> {selectedEvent.volunteerInfo.staffPresent.join(', ')}</p>
+                                        {/*<p><strong>👥 Staff Present:</strong> {selectedEvent.volunteerInfo.staffPresent.join(', ')}</p>*/}
 
                                         <p><strong>📞 Contact Person:</strong> {selectedEvent.contactICName}</p>
                                         <p><strong>📱 Contact Phone:</strong> {selectedEvent.contactICPhone}</p>

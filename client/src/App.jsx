@@ -4,17 +4,20 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import Navbar from "./components/Navbar";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 export default function App() {
     return (
         <BrowserRouter>
-            <Navbar />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/event-details" element={<EventDetailsPage />} />
-            </Routes>
+            <AuthProvider>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/event-details" element={<EventDetailsPage />} />
+                </Routes>
+            </AuthProvider>
         </BrowserRouter>
     );
 }

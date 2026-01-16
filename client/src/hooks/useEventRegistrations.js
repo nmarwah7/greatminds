@@ -1,38 +1,51 @@
 import { useState, useEffect } from 'react';
-import participantsData from '../data/participants.json';
-import volunteersData from '../data/volunteers.json';
-import registrationsData from '../data/registrations.json';
+
+import { db } from '../firebase/firebaseConfig';
+import { collection, onSnapshot, query, where, doc, getDoc } from "firebase/firestore";
 
 export function useEventRegistrations(eventId) {
     const [participants, setParticipants] = useState([]);
     const [volunteers, setVolunteers] = useState([]);
 
     useEffect(() => {
-        if (eventId) {
-            const eventRegistrations = registrationsData.filter(reg => reg.eventId == eventId);
+        if (!eventId) return;
 
-            const participantRegistrations = eventRegistrations.filter(reg => reg.userId.startsWith('user_'));
-            const volunteerRegistrations = eventRegistrations.filter(reg => reg.userId.startsWith('vol_'));
+        const regQuery = query(
+            collection(db, "registrations"), 
+            where("eventId", "==", eventId)
+        );
 
-            const populatedParticipants = participantRegistrations.map(reg => {
-                const participantProfile = participantsData.find(p => p.uid === reg.userId);
-                return {
-                    ...participantProfile,
-                    ...reg
-                };
+        const unsubscribe = onSnapshot(regQuery, async (snapshot) => {
+            const participantList = [];
+            const volunteerList = [];
+
+            const promises = snapshot.docs.map(async (regDoc) => {
+                const regData = regDoc.data();
+                
+                const userRef = doc(db, "users", regData.userId);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    const combinedData = { 
+                        id: regDoc.id,
+                        ...userData,
+                        ...regData
+                    };
+
+                    if (userData.role === 'participant') {
+                        participantList.push(combinedData);
+                    } else if (userData.role === 'volunteer') {
+                        volunteerList.push(combinedData);
+                    }
+                }
             });
 
-            const populatedVolunteers = volunteerRegistrations.map(reg => {
-                const volunteerProfile = volunteersData.find(v => v.uid === reg.userId);
-                return {
-                    ...volunteerProfile,
-                    ...reg
-                };
-            });
+            await Promise.all(promises);
 
-            setParticipants(populatedParticipants);
-            setVolunteers(populatedVolunteers);
-        }
+            setParticipants(participantList);
+            setVolunteers(volunteerList);
+        });
     }, [eventId]);
 
     return { participants, setParticipants, volunteers, setVolunteers };
