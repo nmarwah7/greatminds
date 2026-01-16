@@ -154,7 +154,6 @@ const VolunteerCalendar = () => {
     };
 
     const renderEventContent = (eventInfo) => {
-        console.log(eventInfo.event.extendedProps.volunteerInfo);
         const { imageUrl, isWheelchairAccessible, volunteerInfo } = eventInfo.event.extendedProps;
         const isVolunteerFull = volunteerInfo &&
             volunteerInfo.nVolunteersRegistered >= volunteerInfo.nVolunteersRequired;
