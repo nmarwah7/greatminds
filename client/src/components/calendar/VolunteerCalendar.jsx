@@ -3,11 +3,14 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
-import { useEvents } from '../hooks/useEvents';
+import { useAuth } from "../../context/AuthContext";
+import { useEvents } from '../../hooks/useEvents';
+import { validateEventSelection } from '../../utils/conflictChecker';
 import './VolunteerCalendar.css';
 import CalendarEventCard from './CalendarEventCard';
 
 const VolunteerCalendar = () => {
+    const { user, role } = useAuth();
     const { events, loading } = useEvents();
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
@@ -52,11 +55,18 @@ const VolunteerCalendar = () => {
         setIsDetailModalOpen(true);
     };
 
-    const handleSelectEvent = (event) => {
+    const handleSelectEvent = async (event) => {
         if (basket.some(e => e.id === event.id)) {
             showAlert("This event is already in your selected volunteer slots.", 'error');
             return;
         }
+
+        const result = await validateEventSelection(event, basket, user.uid);
+        if (!result.isValid) {
+            showAlert(result.message, 'error');
+            return;
+        }
+
         setBasket([...basket, event]);
         setIsDetailModalOpen(false);
         setIsBasketOpen(true);

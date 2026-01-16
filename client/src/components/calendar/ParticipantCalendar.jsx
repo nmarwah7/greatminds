@@ -3,11 +3,14 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
+import { useAuth } from "../../context/AuthContext";
 import { useEvents } from '../../hooks/useEvents';
+import { validateEventSelection } from '../../utils/conflictChecker';
 import './ParticipantCalendar.css';
 import CalendarEventCard from './CalendarEventCard';
 
 const ParticipantCalendar = () => {
+    const { user, role } = useAuth();
     const { events, loading } = useEvents();
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
@@ -41,12 +44,18 @@ const ParticipantCalendar = () => {
         setIsDetailModalOpen(true);
     };
 
-    const handleSelectEvent = (event) => {
+    const handleSelectEvent = async (event) => {
         if (basket.some(e => e.id === event.id)) {
             showAlert("This event is already in your selected activities.", 'error');
             return;
         }
-        // Add meeting preference property
+
+        const result = await validateEventSelection(event, basket, user.uid);
+        if (!result.isValid) {
+            showAlert(result.message, 'error');
+            return;
+        }
+
         const eventWithPreference = {
             ...event,
             meetingPreference: null

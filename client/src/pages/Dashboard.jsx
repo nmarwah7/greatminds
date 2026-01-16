@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/firebaseConfig";
 import ParticipantCalendar from "../components/calendar/ParticipantCalendar";
 import StaffCalendar from "../components/calendar/StaffCalendar";
 import VolunteerCalendar from "../components/calendar/VolunteerCalendar";
@@ -51,9 +53,13 @@ export default function Dashboard() {
                 </div>
 
                 <button
-                    onClick={() => {
-                        localStorage.clear();
-                        navigate("/");
+                    onClick={async () => {
+                        try {
+                            await signOut(auth);
+                            navigate("/login");
+                        } catch (e) {
+                            console.error("Logout failed", e);
+                        }
                     }}
                     style={{
                         border: "none",
