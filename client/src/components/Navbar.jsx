@@ -18,6 +18,16 @@ export default function Navbar() {
                             <button className="programs-btn" onClick={() => navigate('/dashboard')}>
                                 Calendar
                             </button>
+                            {role?.toLowerCase() === 'staff' && (
+                                <>
+                                    <button className="programs-btn" onClick={() => navigate('/participant-registrations')}>
+                                        Participant Registrations
+                                    </button>
+                                    <button className="programs-btn" onClick={() => navigate('/volunteer-registrations')}>
+                                        Volunteer Registrations
+                                    </button>
+                                </>
+                            )}
                             {(role?.toLowerCase() === 'participant' || role?.toLowerCase() === 'volunteer') && (
                                 <button className="programs-btn" onClick={() => navigate('/my-registrations')}>
                                     My Registrations

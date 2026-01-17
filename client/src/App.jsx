@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import MyRegistrations from "./pages/MyRegistrations";
+import ParticipantRegistrations from "./pages/ParticipantRegistrations";
+import VolunteerRegistrations from "./pages/VolunteerRegistrations";
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext.jsx";
 
@@ -18,6 +20,8 @@ export default function App() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/event-details" element={<EventDetailsPage />} />
                     <Route path="/my-registrations" element={<MyRegistrations />} />
+                    <Route path="/participant-registrations" element={<ParticipantRegistrations />} />
+                    <Route path="/volunteer-registrations" element={<VolunteerRegistrations />} />
                 </Routes>
             </AuthProvider>
         </BrowserRouter>
