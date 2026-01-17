@@ -14,9 +14,6 @@ export default function Navbar() {
                 <div className="navbar-links">
                     {user ? (
                         <>
-                            <button className="programs-btn" onClick={() => navigate('/dashboard')}>
-                                Calendar
-                            </button>
                             {role?.toLowerCase() === 'staff' && (
                                 <>
                                     <button className="programs-btn" onClick={() => navigate('/participant-registrations')}>
@@ -33,7 +30,7 @@ export default function Navbar() {
                                 </button>
                             )}
                             <button className="programs-btn" onClick={() => navigate('/about')}>About</button>
-                            <button className="home-btn">Home</button>
+                            <button className="home-btn" onClick={() => navigate('/dashboard')}>Home</button>
                         </>
                     ) : (
                         <button className="home-btn" onClick={() => navigate('/login')}>Login</button>
