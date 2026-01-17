@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { db } from '../firebase/firebaseConfig';
-import { doc, updateDoc, writeBatch, collection, query, where, getDocs, Timestamp, deleteDoc} from "firebase/firestore";
+import { doc, updateDoc, writeBatch, collection, query, where, getDocs, Timestamp, deleteDoc } from "firebase/firestore";
 
 import UpdateEventForm from "../components/UpdateEventForm";
 import { useEventRegistrations } from "../hooks/useEventRegistrations";
 import { useConfirmation } from "../hooks/useConfirmation";
-import RosterTable from "../components/RosterTable";
+import { RosterTable, exportToPDF } from "../components/RosterTable.jsx";
 import AttendanceTracker from "../components/AttendanceTracker";
 import { showAlert } from '../utils/alerts';
 import "./EventDetailsPage.css";
@@ -106,10 +106,10 @@ export default function EventDetailsPage() {
         const eventId = event?.id;
 
         // Confirm deletion
-        const confirmMessage = isSeriesEvent 
+        const confirmMessage = isSeriesEvent
             ? `Are you sure you want to delete ALL events in this series "${event.title}"?`
             : `Are you sure you want to delete "${event.title}"?`;
-        
+
         if (!window.confirm(confirmMessage)) {
             return;
         }
@@ -234,6 +234,13 @@ export default function EventDetailsPage() {
                     handleSave={handleSave}
                     isSeries={Boolean(isSeriesEvent)}
                 />
+
+                <button
+                    className="back-button"
+                    onClick={() => exportToPDF(event.title, participants, volunteers)}
+                >
+                    📄 Export Attendance PDF
+                </button>
 
                 {/* Participants Section */}
                 <RosterTable

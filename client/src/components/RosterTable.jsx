@@ -1,6 +1,66 @@
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 import "./RosterTable.css";
 
-export default function RosterTable({ title, people, onStatusChange, isParticipant = false }) {
+export function exportToPDF(eventName, participants, volunteers) {
+    const doc = new jsPDF({ orientation: 'landscape' });
+    doc.setFontSize(18);
+    doc.text(`Attendance Sheet: ${eventName}`, 14, 20);
+    doc.setFontSize(11);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+
+    const participantsTableColumn = [
+        "Name", "Role", "Caregiver", "Email", "Phone", "Wheelchair", "Meeting Point", "Notes", "Attended"
+    ];
+
+    const participantsTableRows = participants.map((p) => [
+        p.name,
+        "Participant",
+        p.caregiverName || "N/A",
+        p.email,
+        p.phone,
+        p.isWheelchairAccessible ? "Yes" : "No",
+        p.meetingPoint || "N/A",
+        p.notes || "N/A",
+        ""
+    ]);
+
+    const volunteersTableColumn = [
+        "Name", "Role", "Email", "Phone", "Notes", "Attended"
+    ];
+
+    const volunteersTableRows = volunteers.map((v) => [
+        v.name,
+        "Volunteer",
+        v.email,
+        v.phone,
+        v.notes || "N/A",
+        ""
+    ]);
+
+    autoTable(doc, {
+        startY: 40,
+        head: [participantsTableColumn],
+        body: participantsTableRows,
+        theme: 'grid',
+        headStyles: { fillColor: [22, 160, 133] },
+    });
+
+    doc.addPage();
+
+    autoTable(doc, {
+        startY: 20,
+        head: [volunteersTableColumn],
+        body: volunteersTableRows,
+        theme: 'grid',
+        headStyles: { fillColor: [22, 160, 133] },
+    });
+
+    doc.save(`Attendance_Sheet_${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+export function RosterTable({ title, people, onStatusChange, isParticipant = false }) {
     return (
         <div className="details-card">
             <h2>{title}</h2>

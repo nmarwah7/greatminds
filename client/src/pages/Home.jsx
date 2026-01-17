@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import RoleCard from "../components/RoleCard";
 import "../index.css";
+import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const login = () => {
         navigate("/login");
@@ -20,12 +22,14 @@ export default function Home() {
                     Think alike, work alike
                 </p>
 
-                <RoleCard
-                    icon="🔐"
-                    title="Login"
-                    description="Whether you are staff, participants, caregivers, or volunteers: join us!"
-                    onClick={login}
-                />
+                {!user && (
+                    <RoleCard
+                        icon="🔐"
+                        title="Login"
+                        description="Whether you are staff, participants, caregivers, or volunteers: join us!"
+                        onClick={login}
+                    />
+                )}
             </div>
         </div>
     );
