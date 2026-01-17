@@ -13,6 +13,7 @@ import { validateEventSelection } from '../../utils/conflictChecker';
 import './ParticipantCalendar.css';
 import { showAlert, flattenEvent } from '../../utils/utils';
 import CalendarEventCard from './CalendarEventCard';
+import { useVoiceControls } from '../../hooks/useVoiceControls';
 
 const ParticipantCalendar = () => {
     const { user, role } = useAuth();
@@ -42,102 +43,12 @@ const ParticipantCalendar = () => {
     };
 
     // Filter events based on wheelchair accessibility
-    const events = showOnlyWheelchairAccessible 
+    const events = showOnlyWheelchairAccessible
         ? allEvents.filter(event => event.extendedProps?.isWheelchairAccessible === true)
         : allEvents;
 
-    // Voice control functions
-    const speak = (text) => {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.9;
-        window.speechSynthesis.speak(utterance);
-    };
-
-    const startVoiceRecognition = () => {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            showAlert(setAlert, "Voice recognition not supported in this browser. Please use Chrome or Edge.", 'error');
-            return;
-        }
-
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        
-        recognition.lang = 'en-US';
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        recognition.onstart = () => {
-            setIsListening(true);
-            speak("Listening for your command");
-        };
-
-        recognition.onresult = (event) => {
-            const command = event.results[0][0].transcript.toLowerCase();
-            setVoiceCommand(command);
-            processVoiceCommand(command);
-        };
-
-        recognition.onerror = (event) => {
-            setIsListening(false);
-            showAlert(setAlert, "Voice recognition error. Please try again.", 'error');
-        };
-
-        recognition.onend = () => {
-            setIsListening(false);
-        };
-
-        recognition.start();
-    };
-
-    const processVoiceCommand = (command) => {
-
-        // Toggle wheelchair accessible events
-        if (command.includes("wheelchair") || command.includes("accessible")) {
-            setShowOnlyWheelchairAccessible(!showOnlyWheelchairAccessible);
-            speak(showOnlyWheelchairAccessible 
-                ? "Showing all events" 
-                : "Showing only wheelchair accessible events");
-            return;
-        }
-
-        // Show basket
-        if (command.includes("show basket") || command.includes("my selection")) {
-            if (basket.length > 0) {
-                setIsBasketOpen(true);
-                speak(`You have ${basket.length} activities in your selection`);
-            } else {
-                speak("Your basket is empty");
-            }
-            return;
-        }
-
-        // Confirm and checkout
-        if (command.includes("confirm") || command.includes("checkout")) {
-            if (basket.length > 0) {
-                onCheckout();
-                speak("Please review your selection");
-            } else {
-                speak("Your basket is empty. Please select activities first.");
-            }
-            return;
-        }
-
-        // Read available events
-        if (command.includes("read events") || command.includes("detail events")) {
-            const eventTitles = events.slice(0, 5).map(e => e.title).join(", ");
-            speak(`Available events include: ${eventTitles}`);
-            return;
-        }
-
-        // Help command
-        if (command.includes("help")) {
-            speak("You can say: show wheelchair events, show basket, confirm registration, or detail events.");
-            return;
-        }
-
-        // Default
-        speak("Sorry, I didn't understand that command. Say help for available commands.");
+    const onCheckout = () => {
+        setCurrentView('summary');
     };
 
     const handleEventClick = (info) => {
@@ -162,7 +73,7 @@ const ParticipantCalendar = () => {
             ...event,
             meetingPreference: null
         };
-        setBasket([...basket, event]);
+        setBasket([...basket, eventWithPreference]);
         setIsDetailModalOpen(false);
         setIsBasketOpen(true);
         setCurrentView('basket');
@@ -178,13 +89,9 @@ const ParticipantCalendar = () => {
         }
     };
 
-    const onCheckout = () => {
-        setCurrentView('summary');
-    };
-
     const handleFinalConfirm = async () => {
         const registrations = [];
-        
+
         const createRegistrationObject = (eventId, seriesId, meetingPoint) => ({
             userId: user.uid,
             eventId: eventId,
@@ -220,7 +127,7 @@ const ParticipantCalendar = () => {
     const renderEventContent = (eventInfo) => {
         const { imageUrl, isWheelchairAccessible } = eventInfo.event.extendedProps;
         const registrationStatus = getRegistrationStatus(eventInfo.event.id);
-        
+
         return (
             <div className={`event-wrapper ${registrationStatus ? `status-${registrationStatus}` : ''}`}>
                 <CalendarEventCard
@@ -237,6 +144,28 @@ const ParticipantCalendar = () => {
                 )}
             </div>
         );
+    };
+
+    const validateCommitments = (basket) => {
+        const groups = basket.reduce((acc, item) => {
+            if (item.isSeries) {
+                acc[item.seriesId] = (acc[item.seriesId] || 0) + 1;
+            }
+            return acc;
+        }, {});
+
+        for (const item of basket) {
+            if (item.isSeries) {
+                const count = groups[item.seriesId];
+                if (count !== item.minDaysRequired) {
+                    return {
+                        valid: false,
+                        msg: `You must select exactly ${item.minDaysRequired} days for "${item.title}". You have selected ${count}.`
+                    };
+                }
+            }
+        }
+        return { valid: true, msg: '' };
     };
 
     const BasketView = ({ basket, onRemove, onCheckout }) => {
@@ -259,41 +188,18 @@ const ParticipantCalendar = () => {
             setBasket(updatedBasket);
         };
 
+        const allHavePreference = basket.every(item =>
+            meetingPreferences[item.id]
+        );
 
-        const validateCommitments = () => {
-            const allHavePreference = basket.every(item =>
-                meetingPreferences[item.id]
-            );
+        if (!allHavePreference) {
+            return {
+                valid: false,
+                msg: 'Please select meeting point for all activities.'
+            };
+        }
 
-            if (!allHavePreference) {
-                return {
-                    valid: false,
-                    msg: 'Please select meeting point for all activities.'
-                };
-            }
-
-            const groups = basket.reduce((acc, item) => {
-                if (item.isSeries) {
-                    acc[item.seriesId] = (acc[item.seriesId] || 0) + 1;
-                }
-                return acc;
-            }, {});
-
-            for (const item of basket) {
-                if (item.isSeries) {
-                    const count = groups[item.seriesId];
-                    if (count !== item.minDaysRequired) {
-                        return {
-                            valid: false,
-                            msg: `You must select exactly ${item.minDaysRequired} days for "${item.title}". You have selected ${count}.`
-                        };
-                    }
-                }
-            }
-            return { valid: true, msg: '' };
-        };
-
-        const validation = validateCommitments();
+        const validation = validateCommitments(basket);
 
         return (
             <div className="basket-sidebar">
@@ -381,6 +287,19 @@ const ParticipantCalendar = () => {
         );
     };
 
+    const { speak, startVoiceRecognition } = useVoiceControls({
+        events,
+        basket,
+        validateCommitments,
+        onCheckout,
+        showOnlyWheelchairAccessible,
+        setShowOnlyWheelchairAccessible,
+        setAlert,
+        setIsListening,
+        setVoiceCommand,
+        setIsBasketOpen,
+    });
+
     return (
         <div className="participant-container">
             {alert && (
@@ -408,7 +327,7 @@ const ParticipantCalendar = () => {
 
                 {/* Voice Control Button */}
                 <div className="voice-control-section">
-                    <button 
+                    <button
                         className={`voice-button ${isListening ? 'listening' : ''}`}
                         onClick={startVoiceRecognition}
                         disabled={isListening}
@@ -420,7 +339,7 @@ const ParticipantCalendar = () => {
                             You said: "{voiceCommand}"
                         </div>
                     )}
-                    <button 
+                    <button
                         className="help-button"
                         onClick={() => speak("Say: show wheelchair events, show basket, confirm registration, or read events")}
                     >
