@@ -20,10 +20,10 @@ export default function Navbar() {
                             {role?.toLowerCase() === 'staff' && (
                                 <>
                                     <button className="programs-btn" onClick={() => navigate('/participant-registrations')}>
-                                        Participant Registrations
+                                        Participant Registry
                                     </button>
                                     <button className="programs-btn" onClick={() => navigate('/volunteer-registrations')}>
-                                        Volunteer Registrations
+                                        Volunteer Registry
                                     </button>
                                 </>
                             )}
