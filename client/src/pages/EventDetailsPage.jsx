@@ -6,7 +6,7 @@ import { doc, updateDoc, writeBatch, collection, query, where, getDocs, Timestam
 
 import UpdateEventForm from "../components/UpdateEventForm";
 import { useEventRegistrations } from "../hooks/useEventRegistrations";
-import { useConfirmation } from "../hooks/useConfirmation";
+import { useConfirmation, useAttendanceConfirmation } from "../hooks/useConfirmation";
 import { RosterTable } from "../components/RosterTable.jsx";
 import AttendanceTracker from "../components/AttendanceTracker";
 import { showAlert } from '../utils/utils.js';
@@ -39,7 +39,7 @@ export default function EventDetailsPage() {
 
     const { participants, setParticipants, volunteers, setVolunteers } = useEventRegistrations(event?.id);
     const { confirmationMessage, confirmationsSent, sendConfirmations } = useConfirmation(participants, volunteers);
-    const [attendanceMessage, setAttendanceMessage] = useState("");
+    const { attendanceMessage, sendAttendanceConfirmations } = useAttendanceConfirmation(participants, volunteers);
 
     const handleSave = async () => {
         const isSeriesEvent = event?.isSeries ?? event?.extendedProps?.isSeries;
@@ -186,21 +186,6 @@ export default function EventDetailsPage() {
         ));
     };
 
-    const submitAttendance = () => {
-        const confirmedParticipants = participants.filter(p => p.status === "confirmed");
-        const confirmedVolunteers = volunteers.filter(v => v.status === "confirmed");
-
-        const participantsWithAttendance = confirmedParticipants.filter(p => p.attendance !== null);
-        const volunteersWithAttendance = confirmedVolunteers.filter(v => v.attendance !== null);
-
-        const totalConfirmed = confirmedParticipants.length + confirmedVolunteers.length;
-        const totalRecorded = participantsWithAttendance.length + volunteersWithAttendance.length;
-
-        setAttendanceMessage(`✅ Attendance submitted! Recorded ${totalRecorded} out of ${totalConfirmed} confirmed attendees.`);
-
-        setTimeout(() => setAttendanceMessage(""), 5000);
-    };
-
     const confirmedParticipants = participants.filter(p => p.status === "confirmed");
     const confirmedVolunteers = volunteers.filter(v => v.status === "confirmed");
 
@@ -277,7 +262,7 @@ export default function EventDetailsPage() {
                             confirmedVolunteers={confirmedVolunteers}
                             handleParticipantAttendanceChange={handleParticipantAttendanceChange}
                             handleVolunteerAttendanceChange={handleVolunteerAttendanceChange}
-                            submitAttendance={submitAttendance}
+                            submitAttendance={sendAttendanceConfirmations}
                             attendanceMessage={attendanceMessage}
                         />
                     </>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { db } from '../firebase/firebaseConfig';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, writeBatch, Timestamp } from 'firebase/firestore';
 
 export function useConfirmation(participants, volunteers) {
     const [confirmationMessage, setConfirmationMessage] = useState("");
@@ -45,4 +45,43 @@ export function useConfirmation(participants, volunteers) {
     };
 
     return { confirmationMessage, confirmationsSent, sendConfirmations };
+}
+
+export function useAttendanceConfirmation(participants, volunteers) {
+    const [attendanceMessage, setAttendanceMessage] = useState("");
+
+    const sendAttendanceConfirmations = async () => {
+        const confirmedParticipants = participants.filter(p => p.status === "confirmed");
+        const confirmedVolunteers = volunteers.filter(v => v.status === "confirmed");
+
+        try {
+            const batch = writeBatch(db);
+            const now = Timestamp.now();
+
+            confirmedParticipants.forEach(p => {
+                const ref = doc(db, 'registrations', p.id);
+                batch.update(ref, { attendance: p.attendance ?? null, attendanceSubmittedAt: now });
+            });
+            confirmedVolunteers.forEach(v => {
+                const ref = doc(db, 'registrations', v.id);
+                batch.update(ref, { attendance: v.attendance ?? null, attendanceSubmittedAt: now });
+            });
+
+            await batch.commit();
+        } catch (err) {
+            setAttendanceMessage(`❌ Failed to save attendance: ${err.message}`);
+            return;
+        }
+
+        const participantsWithAttendance = confirmedParticipants.filter(p => p.attendance !== null && p.attendance !== undefined);
+        const volunteersWithAttendance = confirmedVolunteers.filter(v => v.attendance !== null && v.attendance !== undefined);
+
+        const totalConfirmed = confirmedParticipants.length + confirmedVolunteers.length;
+        const totalRecorded = participantsWithAttendance.length + volunteersWithAttendance.length;
+
+        setAttendanceMessage(`✅ Attendance submitted! Recorded ${totalRecorded} out of ${totalConfirmed} confirmed attendees.`);
+        setTimeout(() => setAttendanceMessage(""), 5000);
+    };
+
+    return { attendanceMessage, sendAttendanceConfirmations };
 }

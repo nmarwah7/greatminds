@@ -35,7 +35,7 @@ export default function UpdateEventForm({ formData, setFormData, handleSave, isS
                         className="form-select"
                     >
                         {activityImages.map((img) => (
-                            <option key={img.id} value={img.url}>
+                            <option key={img.label} value={img.url}>
                                 {img.label}
                             </option>
                         ))}
