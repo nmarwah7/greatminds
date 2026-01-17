@@ -1,0 +1,374 @@
+/* Copy all styles from ParticipantCalendar.css and customize for volunteers */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Registration status highlighting for volunteers */
+.volunteer-event-wrapper.status-registered {
+    background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+}
+
+.volunteer-event-wrapper.status-confirmed {
+    background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+}
+
+.volunteer-event-wrapper.status-waitlisted {
+    background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+}
+
+.registration-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(255, 255, 255, 0.95);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.status-registered .registration-badge {
+    color: #f57f17;
+}
+
+.status-confirmed .registration-badge {
+    color: #2e7d32;
+}
+
+.status-waitlisted .registration-badge {
+    color: #1565c0;
+}
+
+.modal-content {
+    background: #fff;
+    color: #0b3c91;
+    width: 520px;
+    max-width: 95%;
+    padding: 16px;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    overflow: auto;
+}
+
+.summary-modal .summary-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.summary-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border: 1px solid #e7eef5;
+    border-radius: 10px;
+}
+
+.total-section {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-view {
+    padding: 0 !important;
+    overflow-y: auto;
+    width: 500px;
+    max-width: 95%;
+}
+
+.modal-image-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+}
+
+.modal-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.accessibility-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-body h1 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.info-section {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f5f8fa;
+    border-radius: 8px;
+}
+
+.info-section p {
+    margin: 8px 0;
+}
+
+/* Volunteer-specific styles */
+.volunteer-info-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff3e0;
+    border-left: 4px solid #FF9800;
+    border-radius: 8px;
+}
+
+.volunteer-details p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.volunteer-select-btn {
+    background: #FF9800 !important;
+}
+
+.volunteer-select-btn:hover {
+    background: #F57C00 !important;
+}
+
+.modal-actions {
+    padding: 15px 20px;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #eee;
+}
+
+.select-btn {
+    flex: 1;
+    padding: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.select-btn:hover {
+    background: #45a049;
+}
+
+.cancel-btn {
+    flex: 1;
+    padding: 12px;
+    background: #f3f3f3;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.cancel-btn:hover {
+    background: #e0e0e0;
+}
+
+/* Volunteer container */
+.volunteer-container {
+    padding: 20px;
+    position: relative;
+}
+
+/* Basket sidebar */
+.basket-sidebar {
+    position: fixed;
+    right: 20px;
+    top: 140px;
+    width: 280px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.basket-sidebar h3 {
+    margin-top: 0;
+    color: #FF9800;
+}
+
+.basket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 8px 0;
+    background: #f9f9f9;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.basket-item button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 12px;
+    background: #FF9800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.checkout-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.checkout-btn:hover:not(:disabled) {
+    background: #F57C00;
+}
+
+.confirm-pay-btn {
+    padding: 12px 24px;
+    background: #FF9800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.confirm-pay-btn:hover {
+    background: #F57C00;
+}
+
+/* Toast notifications */
+.toast {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    z-index: 2000;
+    animation: slideIn 0.3s ease;
+}
+
+.toast-success {
+    background: #4CAF50;
+}
+
+.toast-error {
+    background: #f44336;
+}
+
+.toast-info {
+    background: #2196F3;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* FullCalendar event styling */
+.fc-event {
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+.fc-event .fc-event-main {
+    background: none !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Volunteer full event styling */
+.volunteer-event-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.volunteer-event-wrapper.volunteer-full {
+    background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.volunteer-full-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #4CAF50;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* Override event card for full events */
+.volunteer-event-wrapper.volunteer-full .fc-event-main {
+    opacity: 0.9;
+}
+
+/* Center the event cards */
+.volunteer-container .fc .fc-event {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.volunteer-container .fc .fc-daygrid-event {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

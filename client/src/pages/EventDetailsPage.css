@@ -1,0 +1,82 @@
+.event-details-page {
+    padding: 120px 32px 32px 32px;
+}
+
+.event-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.back-button {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background: #f9f9f9;
+}
+
+.confirmation-section {
+    text-align: center;
+}
+
+.send-confirmations-button {
+    padding: 14px 32px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.send-confirmations-button:hover {
+    background: #1976D2;
+}
+
+.confirmation-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    color: #333;
+}
+
+.confirmation-message.success {
+    background: #d4edda;
+}
+
+.confirmation-message.warning {
+    background: #fff3cd;
+}
+
+/* Event actions header */
+.event-actions-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.delete-event-button {
+    padding: 10px 20px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.delete-event-button:hover {
+    background: #d32f2f;
+}
+
+.delete-event-button:active {
+    transform: scale(0.98);
+}

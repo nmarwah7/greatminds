@@ -1,0 +1,102 @@
+[
+    {
+        "id": "event_100",
+        "isSeries": false,
+        "seriesId": null,
+        "title": "Mindfulness Workshop",
+        "start": "2026-01-20T10:00:00",
+        "end": "2026-01-20T12:00:00",
+        "extendedProps": {
+            "imageUrl": "https://placehold.co/100x100?text=Art",
+            "isWheelchairAccessible": true,
+            "minDaysRequired": 1,
+            "contactICName": "Sarah Johnson",
+            "contactICPhone": "+65 9876 5432",
+            "meetingPoint": "Woodlands MRT Exit 1 at 9:45am",
+            "cost": 5,
+            "location": "Community Center Room 1",
+            "description": "A workshop to practice mindfulness and meditation techniques.",
+            "volunteerInfo": {
+                "tasksDescription": "Help set up meditation mats, assist participants with seating, serve refreshments during break",
+                "staffPresent": ["Sarah Johnson", "Michael Lee", "Grace Tan"],
+                "nVolunteersRequired":6,
+                "nVolunteersRegistered":6
+            }
+        }
+    },
+    {
+        "id": "event_101",
+        "isSeries": true,
+        "seriesId": "series_abc",
+        "title": "Active Aging Hub",
+        "start": "2026-01-20T12:00:00",
+        "end": "2026-01-20T13:00:00",
+        "extendedProps": {
+            "imageUrl": "https://placehold.co/100x100?text=Ser",
+            "isWheelchairAccessible": true,
+            "minDaysRequired": 3,
+            "contactICName": "Jennifer Wong",
+            "contactICPhone": "+65 9123 8765",
+            "meetingPoint": "Yishun MRT Exit 2 at 11:30am",
+            "cost": 5,
+            "location": "Community Center Room 2",
+            "description": "A weekly program focusing on physical activities and social engagement for seniors.",
+            "volunteerInfo": {
+                "tasksDescription": "Assist with exercise equipment setup, guide seniors through light exercises, facilitate group activities",
+                "staffPresent": ["Jennifer Wong", "David Chen", "Rachel Ng"],
+                "nVolunteersRequired":3,
+                "nVolunteersRegistered":1
+            }
+        }
+    },
+    {
+        "id": "event_102",
+        "isSeries": true,
+        "seriesId": "series_abc",
+        "title": "Active Aging Hub",
+        "start": "2026-01-21T12:00:00",
+        "end": "2026-01-21T13:00:00",
+        "extendedProps": {
+            "imageUrl": "https://placehold.co/100x100?text=Ser",
+            "isWheelchairAccessible": true,
+            "minDaysRequired": 3,
+            "contactICName": "Jennifer Wong",
+            "contactICPhone": "+65 9123 8765",
+            "meetingPoint": "Yishun MRT Exit 2 at 11:30am",
+            "cost": 5,
+            "location": "Community Center Room 2",
+            "description": "A weekly program focusing on physical activities and social engagement for seniors.",
+            "volunteerInfo": {
+                "tasksDescription": "Help with game setup, engage seniors in board games and card games, assist with mobility",
+                "staffPresent": ["Jennifer Wong", "Kevin Tan", "Lisa Koh"],
+                "nVolunteersRequired":5,
+                "nVolunteersRegistered":2
+            }
+        }
+    },
+    {
+        "id": "event_103",
+        "isSeries": true,
+        "seriesId": "series_abc",
+        "title": "Active Aging Hub",
+        "start": "2026-01-22T12:00:00",
+        "end": "2026-01-22T13:00:00",
+        "extendedProps": {
+            "imageUrl": "https://placehold.co/100x100?text=Ser",
+            "isWheelchairAccessible": true,
+            "minDaysRequired": 3,
+            "contactICName": "Jennifer Wong",
+            "contactICPhone": "+65 9123 8765",
+            "meetingPoint": "Yishun MRT Exit 2 at 11:30am",
+            "cost": 5,
+            "location": "Community Center Room 2",
+            "description": "A weekly program focusing on physical activities and social engagement for seniors.",
+            "volunteerInfo": {
+                "tasksDescription": "Support arts and crafts activities, help distribute materials, assist seniors with painting and drawing",
+                "staffPresent": ["Jennifer Wong", "Amy Lim", "Thomas Yeo"],
+                "nVolunteersRequired":4,
+                "nVolunteersRegistered":4
+            }
+        }
+    }
+]

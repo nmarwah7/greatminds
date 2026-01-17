@@ -1,0 +1,269 @@
+.registrations-container {
+    padding: 100px 40px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.registrations-header {
+    margin-bottom: 30px;
+}
+
+.registrations-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #0b3c91;
+}
+
+.registrations-filters {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #0b3c91;
+}
+
+.filter-select {
+    padding: 10px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+/* User Profile Cards */
+.user-profiles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.user-profile-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+.user-profile-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #dee2e6;
+}
+
+.profile-header:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.profile-main h3 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    color: #0b3c91;
+    font-weight: 700;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.stat-badge {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #e9ecef;
+    color: #495057;
+}
+
+.stat-badge.confirmed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stat-badge.registered {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.stat-badge.waitlisted {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.expand-btn {
+    background: #0b3c91;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.expand-btn:hover {
+    background: #1565c0;
+}
+
+/* Profile Details */
+.profile-details {
+    padding: 25px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.detail-item {
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #0b3c91;
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-item strong {
+    display: block;
+    color: #495057;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.detail-item span {
+    color: #212529;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Events List Table */
+.events-list h4 {
+    margin: 0 0 15px 0;
+    color: #0b3c91;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.events-table thead {
+    background: linear-gradient(135deg, #0b3c91 0%, #1565c0 100%);
+    color: white;
+}
+
+.events-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.events-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+
+.events-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-orange {
+    background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
+    color: #e65100;
+}
+
+.status-green {
+    background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+    color: #2e7d32;
+}
+
+.status-blue {
+    background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+    color: #1565c0;
+}
+
+.registrations-loading {
+    padding: 100px 40px;
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+}
+
+.no-registrations {
+    padding: 60px;
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+    background: white;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .events-table {
+        font-size: 12px;
+    }
+
+    .events-table th,
+    .events-table td {
+        padding: 8px;
+    }
+}

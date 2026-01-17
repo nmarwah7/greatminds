@@ -1,0 +1,26 @@
+[
+    {
+        "uid": "vol_001",
+        "name": "Alice Wong",
+        "email": "alice.wong@email.com",
+        "phone": "+65 8123 4567",
+        "skills": ["First Aid", "Baking"],
+        "preferences": "weekend afternoons"
+    },
+    {
+        "uid": "vol_002",
+        "name": "David Tan",
+        "email": "david.tan@email.com",
+        "phone": "+65 8234 5678",
+        "skills": ["Photography", "Storytelling"],
+        "preferences": "weekdays"
+    },
+    {
+        "uid": "vol_003",
+        "name": "Charlie Lim",
+        "email": "charlie.lim@email.com",
+        "phone": "+65 8345 6789",
+        "skills": ["Music", "Guitar"],
+        "preferences": "any"
+    }
+]
